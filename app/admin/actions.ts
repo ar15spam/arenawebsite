@@ -15,30 +15,21 @@ type SignUpProfile = {
         selectedSATPrep: { value: string; label: string; price: number };
         satOneHourCount: number;
         additionalInfo: string;
-    }[]
+    }
 }
+export async function getProfilesInfo(): Promise<SignUpProfile[]> {
 
-export async function getProfilesInfo(): Promise<SignUpProfile> {
     let response = await db.query.initialprofile.findMany({
         columns: {
-            data: true
-        }
+            data: true,
+        },
     });
 
-    const transformedData: SignUpProfile = {
-        profile: response.map((row: any) => ({
-            name: row.data.name,
-            email: row.data.email,
-            selectedPrograms: row.data.selectedPrograms,
-            selectedInternshipOptions: row.data.selectedInternshipOptions,
-            selectedResumeOptions: row.data.selectedResumeOptions,
-            selectedSATPrep: row.data.selectedSATPrep,
-            satOneHourCount: parseInt(row.data.satOneHourCount),
-            additionalInfo: row.data.additionalInfo,
-        }))
-    };
+    let profiles: SignUpProfile[] = []; 
 
-    console.log("Server response:", JSON.stringify(transformedData, null, 2));
+    response.map((record) => {
+        profiles.push(record.data as SignUpProfile)
+    })
 
-    return transformedData;
+    return profiles;
 }

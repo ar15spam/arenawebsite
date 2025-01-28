@@ -1,9 +1,7 @@
 "use server"
 
-import { cookies } from "next/headers"
 import { db } from "@/db"
-import { eq, and, InferInsertModel } from "drizzle-orm"
-import { users, initialprofile } from "@/db/schema"
+import { initialprofile } from "@/db/schema"
 import { v4 as uuid } from "uuid"
 
 interface SignUpProfile {
@@ -30,13 +28,13 @@ export async function createProfile(data: SignUpProfile) {
         data: { 
             "name": profile.name, 
             "email": profile.email,
-            "summerPrograms": [
+            "selectedPrograms": [
                 ...profile.selectedPrograms, 
             ],
-            "internshinOption": profile.selectedInternshipOptions, 
-            "resumeOptions": profile.selectedResumeOptions, 
-            "testOptions": profile.selectedSATPrep, 
-            "individualHours": profile.satOneHourCount,
+            "selectedInternshipOptions": profile.selectedInternshipOptions, 
+            "selectedResumeOptions": profile.selectedResumeOptions, 
+            "selectedSATPrep": profile.selectedSATPrep, 
+            "satOneHourCount": profile.satOneHourCount,
             "additionalInfo": profile.additionalInfo, 
         },
     });
