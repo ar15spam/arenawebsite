@@ -57,6 +57,10 @@ export const userRelations = relations(users, ({ one, many }) => ({
     meetings: one(meetings, {
         fields: [users.meetingId],
         references: [meetings.userId],
+    }),
+    profile: one(initialprofile, {
+        fields: [users.profileId], 
+        references: [initialprofile.id]
     })
 })); 
 
@@ -64,6 +68,13 @@ export const initialprofile = pgTable("initial_profiles", {
     id: text().notNull().primaryKey(), 
     data: jsonb().default({ profile: {} as SignUpProfile }), 
 })
+
+export const initialprofileRelations = relations(initialprofile, ({ one, many }) => ({
+    users: one(users, {
+        fields: [initialprofile.id], 
+        references: [users.profileId], 
+    })
+}))
 
 export const counselors = pgTable("counselors", {
     id: text().notNull().primaryKey(),
@@ -136,22 +147,22 @@ export const classesRelations = relations(classes, ({ one, many }) => ({
 
 //MAKE SURE THAT YOU SET userId not as userid, OTHERWISE DRIZZE WILL THINKT HAT YOU ARE TRYTING TO ACCESS users.id AS A PRIMARY KEY 
 export const usersOnClasses = pgTable("users_classes", {
-    fkUserId: text().references(() => users.id),
-    fkClassId: text().references(() => classes.id),
-}, (t) => ({
-    pk: primaryKey({ columns: [t.fkUserId, t.fkClassId] })
+    userId: text("user_id").notNull().references(() => users.id),
+    classId: text("class_id").notNull().references(() => classes.id),
+}, (table) => ({
+    pk: primaryKey(table.userId, table.classId)
 }));
 
-export const usersOnClassesRelations = relations(usersOnClasses, ({ one, many }) => ({
+export const usersOnClassesRelations = relations(usersOnClasses, ({ one }) => ({
     user: one(users, {
-        fields: [usersOnClasses.fkUserId],
+        fields: [usersOnClasses.userId],
         references: [users.id], 
     }),
     class: one(classes, {
-        fields: [usersOnClasses.fkClassId],
+        fields: [usersOnClasses.classId],
         references: [classes.id], 
     }),
-})); 
+}));
 
 export const meetings = pgTable("meetings", {
     id: text().notNull().primaryKey(), 

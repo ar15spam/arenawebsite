@@ -1,6 +1,6 @@
 {
-  "id": "7e0bcca3-f893-44a0-8d2b-f68b8170471b",
-  "prevId": "4a934822-59bd-48d4-9cc6-73e2976f2bba",
+  "id": "6acf1c66-3efc-4520-8232-31483b540546",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -70,8 +70,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.counselorTables": {
-      "name": "counselorTables",
+    "public.counselor_schedules": {
+      "name": "counselor_schedules",
       "schema": "",
       "columns": {
         "id": {
@@ -91,7 +91,7 @@
           "type": "jsonb",
           "primaryKey": false,
           "notNull": false,
-          "default": "'{\"availability\":[]}'::jsonb"
+          "default": "'{\"booked\":[]}'::jsonb"
         },
         "updatedAt": {
           "name": "updatedAt",
@@ -103,9 +103,9 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "counselorTables_counselorId_counselors_id_fk": {
-          "name": "counselorTables_counselorId_counselors_id_fk",
-          "tableFrom": "counselorTables",
+        "counselor_schedules_counselorId_counselors_id_fk": {
+          "name": "counselor_schedules_counselorId_counselors_id_fk",
+          "tableFrom": "counselor_schedules",
           "tableTo": "counselors",
           "columnsFrom": [
             "counselorId"
@@ -177,6 +177,110 @@
           ]
         }
       },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.initial_profiles": {
+      "name": "initial_profiles",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "data": {
+          "name": "data",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'{\"profile\":{}}'::jsonb"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.meetings": {
+      "name": "meetings",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "counselorId": {
+          "name": "counselorId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "userId": {
+          "name": "userId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "meetingDate": {
+          "name": "meetingDate",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "data": {
+          "name": "data",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'{\"notes\":[]}'::jsonb"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "meetings_counselorId_counselors_id_fk": {
+          "name": "meetings_counselorId_counselors_id_fk",
+          "tableFrom": "meetings",
+          "tableTo": "counselors",
+          "columnsFrom": [
+            "counselorId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "meetings_userId_users_id_fk": {
+          "name": "meetings_userId_users_id_fk",
+          "tableFrom": "meetings",
+          "tableTo": "users",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
@@ -287,27 +391,53 @@
           "primaryKey": false,
           "notNull": true
         },
-        "scheduleId": {
-          "name": "scheduleId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
         "phoneNumber": {
           "name": "phoneNumber",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
+        "scheduleId": {
+          "name": "scheduleId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "meetingId": {
+          "name": "meetingId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "counselorId": {
           "name": "counselorId",
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "profileId": {
+          "name": "profileId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "users_profileId_initial_profiles_id_fk": {
+          "name": "users_profileId_initial_profiles_id_fk",
+          "tableFrom": "users",
+          "tableTo": "initial_profiles",
+          "columnsFrom": [
+            "profileId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "users_email_unique": {
@@ -333,27 +463,27 @@
       "name": "users_classes",
       "schema": "",
       "columns": {
-        "userid": {
-          "name": "userid",
+        "user_id": {
+          "name": "user_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
-        "classesId": {
-          "name": "classesId",
+        "class_id": {
+          "name": "class_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "users_classes_userid_users_id_fk": {
-          "name": "users_classes_userid_users_id_fk",
+        "users_classes_user_id_users_id_fk": {
+          "name": "users_classes_user_id_users_id_fk",
           "tableFrom": "users_classes",
           "tableTo": "users",
           "columnsFrom": [
-            "userid"
+            "user_id"
           ],
           "columnsTo": [
             "id"
@@ -361,12 +491,12 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "users_classes_classesId_classes_id_fk": {
-          "name": "users_classes_classesId_classes_id_fk",
+        "users_classes_class_id_classes_id_fk": {
+          "name": "users_classes_class_id_classes_id_fk",
           "tableFrom": "users_classes",
           "tableTo": "classes",
           "columnsFrom": [
-            "classesId"
+            "class_id"
           ],
           "columnsTo": [
             "id"
@@ -376,11 +506,11 @@
         }
       },
       "compositePrimaryKeys": {
-        "users_classes_userid_classesId_pk": {
-          "name": "users_classes_userid_classesId_pk",
+        "users_classes_user_id_class_id_pk": {
+          "name": "users_classes_user_id_class_id_pk",
           "columns": [
-            "userid",
-            "classesId"
+            "user_id",
+            "class_id"
           ]
         }
       },

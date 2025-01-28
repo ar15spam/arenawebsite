@@ -35,7 +35,7 @@ export default function page({}: Props) {
       if(response.counselorid){
         router.push(`/home/counselor/${response.counselorid}`); 
       } else {
-        router.push(`/home/user/${response.userId}`); 
+        router.push(`/portal/${response.userId}`); 
       }
     } else { 
       return <p>yo homie something aint right</p>

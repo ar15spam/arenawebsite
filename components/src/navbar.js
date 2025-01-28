@@ -1,5 +1,6 @@
-import React from 'react';
-import logo from './assets/logo123.webp'; // Adjust the path
+import React from 'react';// Adjust the path
+
+import Image from 'next/image';
 
 const NAVBAR1 = () => {
   return (
@@ -7,7 +8,7 @@ const NAVBAR1 = () => {
      
       <header className="absolute top-0 left-0 w-full p-4 flex justify-between items-center">
         <div className="logo flex items-center text-lg font-bold">
-          <img src={logo} alt="Logo" className="h-8 mr-2" />
+          <Image src="/logo123.webp" alt="" width={10} height={10} />
           <span>ARENA</span>
         </div>
         

@@ -1,15 +1,16 @@
 "use client";
 
 import React from "react";
-import logo from "./assets/logo123.png" // Adjust the path
+
+import Image from "next/image";
+import Link from "next/link";
 
 const HeroSection = () => {
   return (
     <section className="hero-section bg-white text-black min-h-screen flex flex-col items-center justify-center">
-      {/* Header */}
       <header className="absolute top-0 left-0 w-full p-4 flex justify-between items-center">
         <div className="logo flex items-center text-lg font-bold">
-          <img src={logo} alt="Logo" className="h-8 mr-2" />
+          <Image src="/logo123.png" alt="" width={50} height={50} />
           <span>ARENA</span>
         </div>
         <nav className="hidden lg:flex text-sm space-x-8">
@@ -25,15 +26,16 @@ const HeroSection = () => {
           <button
             className="relative inline-flex items-center justify-center px-6 py-3 text-md font-semibold text-black transition-all duration-200 bg-white font-pj rounded-full"
           >
+            <Link href="/arenasignup">
             Register
+            </Link>
           </button>
         </div>
       </header>
 
-      {/* Hero Content */}
       <div className="flex flex-col items-center text-center px-4">
         <div className="neon-logo">
-          <img src={logo} alt="Logo" className="h-48" />
+          <Image src="/logo123.webp" alt="" width={300} height={300} />
         </div>
         <h1 className="text-4xl md:text-6xl font-bold leading-snug">
           Your Path to College Starts Here!

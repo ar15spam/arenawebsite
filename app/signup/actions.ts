@@ -71,7 +71,7 @@ export async function signupuser(data: userSchemaType) {
                 maxAge: 60 * 60 * 24 * 7,
             });
 
-            return { success: true }; 
+            return { success: true, userId }; 
 
         }
 

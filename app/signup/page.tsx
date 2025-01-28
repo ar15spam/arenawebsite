@@ -30,11 +30,11 @@ export default function page({}: Props) {
     });
 
     const onSubmit = async (data: userSchemaType) => {
-        console.log('Submitted data:', data);
+        //console.log('Submitted data:', data);
         const sendToDb = await signupuser(data); 
         if(sendToDb){
             console.log("Data sent to db!"); 
-            router.push("/home"); 
+            router.push(`/potal/${sendToDb.userId}`); 
             
         } else {
             console.log("Error!"); 
