@@ -9,11 +9,11 @@ function App() {
 
   return (
     <div className="App">
-    <HeroSection/>
-    <Services/>
-    <Testimonials />
-    <Pricing/>
-    <Footer/>
+      <HeroSection/>
+      <Services/>
+      <Testimonials />
+      <Pricing/>
+      <Footer/>
     </div>
   );
 }

@@ -248,6 +248,7 @@ const ArenaSignUpForm = () => {
                 <input
                   type="text"
                   name="name"
+                  autoComplete="name"
                   value={formData.profile.name}
                   onChange={handleInputChange}
                   className="w-full px-4 py-2 border rounded-md"
@@ -259,6 +260,7 @@ const ArenaSignUpForm = () => {
                 <input
                   type="email"
                   name="email"
+                  autoComplete="email"
                   value={formData.profile.email}
                   onChange={handleInputChange}
                   className="w-full px-4 py-2 border rounded-md"
