@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from 'react'
-import essaydata from "@/assets/essays.json"
+import essaydata from "@/assets/essays.json" 
 
 type Props = {}
 
