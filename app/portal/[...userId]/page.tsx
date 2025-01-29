@@ -1,8 +1,6 @@
 "use client"
 
-import React, { useState, useEffect } from 'react'
-
-import UserCalender from '@/components/Other/UserCalender'
+import React from 'react'
 
 type Props = {}
 

@@ -1,7 +1,7 @@
 "use client"
 
-import React, { useState, useEffect, useRef } from "react"; 
-import { useAnimate, useTransform, useScroll, useMotionValueEvent } from "framer-motion";
+import React, { useEffect, useRef } from "react"; 
+import { useScroll } from "framer-motion";
 
 import Navbar from "@/components/ui/Navbar";
 

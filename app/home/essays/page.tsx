@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import essaydata from "@/components/src/assets/essays.json"; 
 
 type Props = {}

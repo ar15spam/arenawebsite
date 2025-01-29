@@ -4,7 +4,6 @@ import { db } from "@/db";
 import { users, counselors, counselorSchedules, userSchedule } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { cookies } from "next/headers";
-import { InferInsertModel } from "drizzle-orm";
 
 let isCounselor: boolean = false; 
 

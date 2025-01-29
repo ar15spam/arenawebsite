@@ -1,9 +1,6 @@
 "use server";
 
-import { cookies } from "next/headers";
 import { db } from "@/db";
-import { eq, and } from "drizzle-orm";
-import { initialprofile, users } from "@/db/schema";
 
 type SignUpProfile = {
     profile: {
