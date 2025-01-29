@@ -39,33 +39,39 @@ const ArenaSignUpForm = () => {
     }
   });
 
-  const internshipOptions: { value: string, label: string, price: number }[] = [
+  const internshipOptions = [
     { value: "General Internship Help", label: "General Internship Help - $40", price: 40 },
     { value: "Guaranteed Internship Placement", label: "Guaranteed Internship Placement - $150", price: 150 },
     { value: "General Professor Internship Help", label: "General Professor Internship Help - $60", price: 60 },
   ];
 
-  const resumeOptions: { value: string, label: string, price: number }[] = [
+  const resumeOptions = [
     { value: "Resume & Cover Letter Review", label: "Resume & Cover Letter Review - $25", price: 25 },
     { value: "Interview Prep", label: "Interview Prep - $30", price: 30 },
   ];
 
-  const satPrepOptions: { value: string, label: string, price: number }[] = [
-    { value: "10 Hours", label: "10 Hours - $149", price: 149 },
-    { value: "25 Hours", label: "25 Hours - $359", price: 359 },
-    { value: "50 Hours", label: "50 Hours - $699", price: 699 },
+  const satPrepOptions = [
+    { value: "5 Hours", label: "5 one-hour meetings and 1 practice test - $150", price: 150 },
+    { value: "15 Hours", label: "15 one-hour meetings and 3 practice tests - $360", price: 360 },
+    { value: "30 Hours", label: "30 one-hour meetings and 6 practice tests - $680", price: 680 },
   ];
 
   const summerProgramOptions: { value: string, label: string }[] = [
     { value: "AI4ALL (Bay Area)", label: "AI4ALL (Bay Area)" },
+    { value: "AI4ALL Bootcamp", label: "AI4ALL Bootcamp: Artificial Intelligence for all students" },
+    { value: "AIMI AI Bootcamp", label: "AIMI AI Bootcamp: Hands-on AI training" },
+    { value: "AIMI AI Internship", label: "AIMI AI Internship: Artificial Intelligence in Medicine" },
     { value: "Alameda County 4-H Summer Camp (Bay Area)", label: "Alameda County 4-H Summer Camp (Bay Area)" },
     { value: "American Conservatory Theater Summer Training Congress (San Francisco)", label: "American Conservatory Theater Summer Training Congress (San Francisco)" },
     { value: "Amgen Scholars Program (National)", label: "Amgen Scholars Program (National)" },
+    { value: "ARC STEM Academy", label: "ARC STEM Academy" },
+    { value: "Art & Anatomy", label: "Art & Anatomy: Intersection of medicine and art" },
     { value: "Art Camp at Richmond Art Center (Bay Area)", label: "Art Camp at Richmond Art Center (Bay Area)" },
     { value: "AspireIT Summer Camp (Bay Area)", label: "AspireIT Summer Camp (Bay Area)" },
-    { value: "ATDP at UC Berkeley (Bay Area)", label: "ATDP at UC Berkeley (Bay Area)" },
     { value: "Astronomy Academy at Chabot Space & Science Center (Oakland)", label: "Astronomy Academy at Chabot Space & Science Center (Oakland)" },
+    { value: "ATDP at UC Berkeley (Bay Area)", label: "ATDP at UC Berkeley (Bay Area)" },
     { value: "Bay Area Writing Project Young Writers Camp (Berkeley)", label: "Bay Area Writing Project Young Writers Camp (Berkeley)" },
+    { value: "Beaverworks", label: "Beaverworks: Hands-on STEM projects for students" },
     { value: "Berkeley Lab Summer Student Program (Berkeley)", label: "Berkeley Lab Summer Student Program (Berkeley)" },
     { value: "Black Girls Code Summer Camp (San Francisco)", label: "Black Girls Code Summer Camp (San Francisco)" },
     { value: "Brandeis University Precollege Online Program (National)", label: "Brandeis University Precollege Online Program (National)" },
@@ -75,28 +81,35 @@ const ArenaSignUpForm = () => {
     { value: "Camp Kesem (Stanford) (Bay Area)", label: "Camp Kesem (Stanford) (Bay Area)" },
     { value: "Camp Unalayee Wilderness (Bay Area)", label: "Camp Unalayee Wilderness (Bay Area)" },
     { value: "Carnegie Mellon University Pre-College Programs (National)", label: "Carnegie Mellon University Pre-College Programs (National)" },
+    { value: "CCRI - Climate", label: "CCRI - Climate: Climate change-focused internship" },
     { value: "COSMOS (UC campuses)", label: "COSMOS (UC campuses)" },
     { value: "Coursera Summer Learning Program (National, online)", label: "Coursera Summer Learning Program (National, online)" },
+    { value: "CSI Internship", label: "CSI Internship: Clinical Summer Internship" },
     { value: "Davidson THINK Summer Institute (Reno, NV)", label: "Davidson THINK Summer Institute (Reno, NV)" },
     { value: "Design Quest at The Tech Interactive (San Jose)", label: "Design Quest at The Tech Interactive (San Jose)" },
     { value: "Discovery Internships (National)", label: "Discovery Internships (National)" },
     { value: "Earthwatch Institute Teen Expeditions (Bay Area/National)", label: "Earthwatch Institute Teen Expeditions (Bay Area/National)" },
-    { value: "Experiences in Research at Berkeley Labs (Berkeley)", label: "Experiences in Research at Berkeley Labs (Berkeley)" },
-    { value: "Exploring Computer Science at SRI International (Menlo Park)", label: "Exploring Computer Science at SRI International (Menlo Park)" },
     { value: "EXPLO at Yale Summer Programs (National)", label: "EXPLO at Yale Summer Programs (National)" },
+    { value: "EXPLORE Biomedical Research", label: "EXPLORE Biomedical Research: Lectures in biomedical science" },
+    { value: "Exploring Computer Science at SRI International (Menlo Park)", label: "Exploring Computer Science at SRI International (Menlo Park)" },
+    { value: "Experiences in Research at Berkeley Labs (Berkeley)", label: "Experiences in Research at Berkeley Labs (Berkeley)" },
     { value: "Farm Academy Live Summer Program (Bay Area)", label: "Farm Academy Live Summer Program (Bay Area)" },
     { value: "Foothill College Summer Programs for High Schoolers (Bay Area)", label: "Foothill College Summer Programs for High Schoolers (Bay Area)" },
-    { value: "Future Stars Summer Camps (Athletics) (Bay Area)", label: "Future Stars Summer Camps (Athletics) (Bay Area)" },
     { value: "Future Problem Solvers International Conference (National)", label: "Future Problem Solvers International Conference (National)" },
+    { value: "Future Stars Summer Camps (Athletics) (Bay Area)", label: "Future Stars Summer Camps (Athletics) (Bay Area)" },
     { value: "Girls Who Code Summer Immersion Program (Bay Area)", label: "Girls Who Code Summer Immersion Program (Bay Area)" },
     { value: "Golden Gate National Parks Conservancy Summer Programs (Bay Area)", label: "Golden Gate National Parks Conservancy Summer Programs (Bay Area)" },
+    { value: "GRIPS", label: "GRIPS: Genomics Research Program" },
     { value: "Gustavus Adolphus College Summer Speech Institute (National)", label: "Gustavus Adolphus College Summer Speech Institute (National)" },
-    { value: "Harker School Summer Programs (San Jose)", label: "Harker School Summer Programs (San Jose)" },
     { value: "Haas School of Business Entrepreneurship Program for Youth (Berkeley)", label: "Haas School of Business Entrepreneurship Program for Youth (Berkeley)" },
+    { value: "HARRIS Internship", label: "HARRIS Internship: Advanced neuroscience training" },
+    { value: "HAS Astronomy Program", label: "HAS Astronomy Program: Astronomy focus for high schoolers" },
+    { value: "Harker School Summer Programs (San Jose)", label: "Harker School Summer Programs (San Jose)" },
     { value: "Head-Royce School Summer Programs (Oakland)", label: "Head-Royce School Summer Programs (Oakland)" },
     { value: "High School Summer Internship Program at UCSF (San Francisco)", label: "High School Summer Internship Program at UCSF (San Francisco)" },
     { value: "Humanities Summer Program at Stanford (Stanford)", label: "Humanities Summer Program at Stanford (Stanford)" },
     { value: "iD Tech Camps (Stanford, UC Berkeley, SF State) (Bay Area)", label: "iD Tech Camps (Stanford, UC Berkeley, SF State) (Bay Area)" },
+    { value: "IFSS Shadowing", label: "IFSS Shadowing: Individual shadowing opportunities" },
     { value: "Internships at NASA Ames Research Center (Mountain View)", label: "Internships at NASA Ames Research Center (Mountain View)" },
     { value: "International Diplomacy Program by Envision (National)", label: "International Diplomacy Program by Envision (National)" },
     { value: "Intro to Design Thinking at Stanford D-School (Stanford)", label: "Intro to Design Thinking at Stanford D-School (Stanford)" },
@@ -128,29 +141,43 @@ const ArenaSignUpForm = () => {
     { value: "Research Science Institute (RSI) by MIT (National)", label: "Research Science Institute (RSI) by MIT (National)" },
     { value: "Rice University STEM Summer Programs (National)", label: "Rice University STEM Summer Programs (National)" },
     { value: "Rosetta Institute of Biomedical Research Molecular Medicine Summer Camp (San Francisco)", label: "Rosetta Institute of Biomedical Research Molecular Medicine Summer Camp (San Francisco)" },
-    { value: "Santa Clara University Summer Engineering Seminar (SES) (Bay Area)", label: "Santa Clara University Summer Engineering Seminar (SES) (Bay Area)" },
-    { value: "San Francisco Conservatory of Music Pre-College Program (San Francisco)", label: "San Francisco Conservatory of Music Pre-College Program (San Francisco)" },
-    { value: "San Jose State University Aviation Summer Camp (San Jose)", label: "San Jose State University Aviation Summer Camp (San Jose)" },
-    { value: "Sequoia Teen Entrepreneur Program (Bay Area)", label: "Sequoia Teen Entrepreneur Program (Bay Area)" },
-    { value: "Shakespeare Camp at the California Shakespeare Theater (Bay Area)", label: "Shakespeare Camp at the California Shakespeare Theater (Bay Area)" },
-    { value: "Silicon Valley Youth Climate Action Summer Program (Bay Area)", label: "Silicon Valley Youth Climate Action Summer Program (Bay Area)" },
-    { value: "Smithsonian Summer Camps (National)", label: "Smithsonian Summer Camps (National)" },
-    { value: "Stanford Pre-Collegiate Summer Institutes (Stanford)", label: "Stanford Pre-Collegiate Summer Institutes (Stanford)" },
+    { value: "Ross Mathematics Program (National)", label: "Ross Mathematics Program (National)" },
+    { value: "Santa Clara University Summer Engineering Seminar (SCU SES) (Santa Clara)", label: "Santa Clara University Summer Engineering Seminar (SCU SES) (Santa Clara)" },
+    { value: "San Francisco State University Summer College Prep Camps (San Francisco)", label: "San Francisco State University Summer College Prep Camps (San Francisco)" },
+    { value: "San Jose State University Engineering Summer Program (San Jose)", label: "San Jose State University Engineering Summer Program (San Jose)" },
+    { value: "Santa Clara County Library Teen Leadership Camp (San Jose)", label: "Santa Clara County Library Teen Leadership Camp (San Jose)" },
+    { value: "Scripps College Academy Summer Program (National)", label: "Scripps College Academy Summer Program (National)" },
+    { value: "Silicon Valley Community Foundation Summer Fellowship (Bay Area)", label: "Silicon Valley Community Foundation Summer Fellowship (Bay Area)" },
+    { value: "Simons Summer Research Program (National)", label: "Simons Summer Research Program (National)" },
+    { value: "Smithsonian Summer Camps (Washington, D.C.)", label: "Smithsonian Summer Camps (Washington, D.C.)" },
+    { value: "Stanford Institutes of Medicine Summer Research Program (Stanford)", label: "Stanford Institutes of Medicine Summer Research Program (Stanford)" },
+    { value: "Stanford Pre-Collegiate Studies Summer Institutes (Stanford)", label: "Stanford Pre-Collegiate Studies Summer Institutes (Stanford)" },
     { value: "Stanford University Mathematics Camp (SUMaC) (Stanford)", label: "Stanford University Mathematics Camp (SUMaC) (Stanford)" },
-    { value: "Stevenson School Summer Camps (Pebble Beach)", label: "Stevenson School Summer Camps (Pebble Beach)" },
-    { value: "Summer Discovery Programs (UCLA, UC Berkeley, etc.) (Bay Area)", label: "Summer Discovery Programs (UCLA, UC Berkeley, etc.) (Bay Area)" },
-    { value: "Summer Immersion Program at Columbia University (National)", label: "Summer Immersion Program at Columbia University (National)" },
-    { value: "Summer Research Academy at the Lawrence Berkeley National Lab (Berkeley)", label: "Summer Research Academy at the Lawrence Berkeley National Lab (Berkeley)" },
-    { value: "Summer Science Internship Program at Stanford (Stanford)", label: "Summer Science Internship Program at Stanford (Stanford)" },
-    { value: "Teen Advocates for Science Communication at the California Academy of Sciences (San Francisco)", label: "Teen Advocates for Science Communication at the California Academy of Sciences (San Francisco)" },
-    { value: "The Crucible Industrial Arts Camps (Oakland)", label: "The Crucible Industrial Arts Camps (Oakland)" },
-    { value: "The Harker School STEM Institute (San Jose)", label: "The Harker School STEM Institute (San Jose)" },
-    { value: "UC Davis Young Scholars Program (Davis)", label: "UC Davis Young Scholars Program (Davis)" },
-    { value: "UCLA Pre-College Summer Institute (Los Angeles)", label: "UCLA Pre-College Summer Institute (Los Angeles)" },
-    { value: "UCSF Internships for Teen Scientists (San Francisco)", label: "UCSF Internships for Teen Scientists (San Francisco)" },
-    { value: "USC Summer Programs for High School Students (Los Angeles)", label: "USC Summer Programs for High School Students (Los Angeles)" },
-    { value: "Youth Leadership Summit for Math and Science (National)", label: "Youth Leadership Summit for Math and Science (National)" },
-    { value: "Yosemite Institute High School Programs (Yosemite)", label: "Yosemite Institute High School Programs (Yosemite)" },
+    { value: "Summer Academy for Math and Science (SAMS) at Carnegie Mellon (National)", label: "Summer Academy for Math and Science (SAMS) at Carnegie Mellon (National)" },
+    { value: "Summer Engineering Exploration (SEE) at University of Michigan (National)", label: "Summer Engineering Exploration (SEE) at University of Michigan (National)" },
+    { value: "Summer Science Program (SSP) (National)", label: "Summer Science Program (SSP) (National)" },
+    { value: "Sustainable Summer Program (National)", label: "Sustainable Summer Program (National)" },
+    { value: "Syracuse University Summer College for High School Students (National)", label: "Syracuse University Summer College for High School Students (National)" },
+    { value: "Teen Leadership Corps at Exploratorium (San Francisco)", label: "Teen Leadership Corps at Exploratorium (San Francisco)" },
+    { value: "Teen Research and Education in Environmental Science (TREES) (National)", label: "Teen Research and Education in Environmental Science (TREES) (National)" },
+    { value: "Telluride Association Summer Seminar (TASS) (National)", label: "Telluride Association Summer Seminar (TASS) (National)" },
+    { value: "The Tech Interactive Youth Programs (San Jose)", label: "The Tech Interactive Youth Programs (San Jose)" },
+    { value: "University of California COSMOS Program (Various Campuses)", label: "University of California COSMOS Program (Various Campuses)" },
+    { value: "University of Chicago Summer Session (National)", label: "University of Chicago Summer Session (National)" },
+    { value: "University of Michigan Math and Science Scholars (UM-MSS) (National)", label: "University of Michigan Math and Science Scholars (UM-MSS) (National)" },
+    { value: "University of Pennsylvania Summer Academies (National)", label: "University of Pennsylvania Summer Academies (National)" },
+    { value: "University of Southern California Summer Programs (USC) (National)", label: "University of Southern California Summer Programs (USC) (National)" },
+    { value: "UC Berkeley Pre-College Scholars (Berkeley)", label: "UC Berkeley Pre-College Scholars (Berkeley)" },
+    { value: "UC Davis Young Scholars Program (National)", label: "UC Davis Young Scholars Program (National)" },
+    { value: "UC Irvine High School Summer Institute of Law (Irvine)", label: "UC Irvine High School Summer Institute of Law (Irvine)" },
+    { value: "UC Santa Cruz Science Internship Program (SIP) (Santa Cruz)", label: "UC Santa Cruz Science Internship Program (SIP) (Santa Cruz)" },
+    { value: "Vanderbilt Summer Academy (National)", label: "Vanderbilt Summer Academy (National)" },
+    { value: "Washington University in St. Louis Summer Programs (National)", label: "Washington University in St. Louis Summer Programs (National)" },
+    { value: "Worcester Polytechnic Institute Frontiers Program (National)", label: "Worcester Polytechnic Institute Frontiers Program (National)" },
+    { value: "Yale Young Global Scholars (YYGS) (National)", label: "Yale Young Global Scholars (YYGS) (National)" },
+    { value: "Youth Climate Summit (Bay Area)", label: "Youth Climate Summit (Bay Area)" },
+    { value: "Youth Empowered Action (YEA) Camp (National)", label: "Youth Empowered Action (YEA) Camp (National)" },
+    { value: "Zoox Robotics High School Internship Program (Foster City)", label: "Zoox Robotics High School Internship Program (Foster City)" },
   ];
 
   const handleInputChange = (e: { target: { name: string; value: any; }; }) => {
@@ -345,18 +372,7 @@ const ArenaSignUpForm = () => {
                 className="w-full"
               />
             </div>
-  
-            <div>
-              <label className="block text-sm font-semibold mb-2">Add Individual SAT/ACT Hours</label>
-              <input
-                type="number"
-                name="satOneHourCount"
-                value={formData.profile.satOneHourCount}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2 border rounded-md"
-                placeholder="Enter hours"
-              />
-            </div>
+
           {/* Additional Info Section */}
         <div style={{ marginTop: "20px", marginBottom: "20px" }}>
           <label className="block text-sm font-semibold mb-2">

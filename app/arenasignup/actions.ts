@@ -21,9 +21,9 @@ export async function createProfile(data: SignUpProfile) {
 
     const { profile } = data; 
 
-    let profileId = uuid(); 
+    const profileId = uuid(); 
 
-    let response = await db.insert(initialprofile).values({
+    const response = await db.insert(initialprofile).values({
         id: profileId, 
         data: { 
             "name": profile.name, 
