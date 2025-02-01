@@ -8,11 +8,33 @@ import { getInfo } from './actions'
 import Home from "@/components/portal/Home"
 import Calendar from '@/components/portal/Calendar'
 import Drive from '@/components/portal/Drive'
+import Classes from '@/components/portal/Classes'
 
 interface BottomComponent {
   name: string
   link?: string
   reactComponent?: ReactNode
+}
+
+type Subject =
+  | {
+      isCounselor: true;
+      counselorname: string;
+      counselorId: string;
+    }
+  | {
+      isCounselor: false;
+      username: string;
+      userId: string;
+};
+
+
+function isFrontendUser(subject: any): subject is Extract<Subject, { isCounselor: false }> {
+  return subject && typeof subject === "object" && "isCounselor" in subject && !subject.isCounselor;
+}
+
+function isFrontendCounselor(subject: any): subject is Extract<Subject, { isCounselor: true }> {
+  return subject && typeof subject === "object" && "isCounselor" in subject && subject.isCounselor;
 }
 
 export default function NavigationLayout() {
@@ -27,19 +49,20 @@ export default function NavigationLayout() {
     { name: "Home", reactComponent: <Home /> },
     { name: "Drive", reactComponent: <Drive /> },
     { name: "Calendar", reactComponent: <Calendar /> },
+    { name: "Classes", reactComponent: <Classes /> } 
   ]
 
   useEffect(() => {
     async function getUserName() {
-      const response = await getInfo()
-      if (response.username) {
-        setUsername(response.username)
-      } else {
-        setUsername("No User Detected")
+      const response = await getInfo();
+      if (isFrontendUser(response)) {
+        setUsername(response.username ?? "No User Detected");
+      } else if (isFrontendCounselor(response)) {
+        setUsername(response.counselorname ?? "No Counselor Detected");
       }
     }
-    getUserName()
-  }, [])
+    getUserName();
+  }, []);
 
   const toggleBottom = (component: BottomComponent) => {
     setBottom(component)

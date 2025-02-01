@@ -1,13 +1,23 @@
 "use server";
 
 import { db } from "@/db";
-import { users, counselors, counselorSchedules, userSchedule } from "@/db/schema";
+import { users, counselors, counselorSchedules, userSchedule, meetings, classes, usersOnClasses } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { cookies } from "next/headers";
 
-let isCounselor: boolean = false; 
+type Subject =
+  | {
+      isCounselor: true;
+      counselorname: string;
+      counselorId: string;
+    }
+  | {
+      isCounselor: false;
+      username: string;
+      userId: string;
+};
 
-export async function getInfo() {
+export async function getInfo(): Promise<Subject | null> {
     const cookieStore = await cookies();
     const counselorId = cookieStore.get("counselorid")?.value;
     const userId = cookieStore.get("userid")?.value;
@@ -17,51 +27,129 @@ export async function getInfo() {
             where: eq(counselors.id, counselorId),
         });
 
-        let counselorname = counselor.fullname; 
-
         if (counselor) {
-            !isCounselor; 
-            return { counselorname, counselorId, isCounselor }; 
+            return { 
+                isCounselor: true, 
+                counselorname: counselor.fullname, 
+                counselorId 
+            };
         }
-
     } else if (userId) {
         const user = await db.query.users.findFirst({
             where: eq(users.id, userId),
         });
 
-        let username = user.fullname; 
-
         if (user) {
-            isCounselor; 
-            return { username, userId, isCounselor }; 
+            return { 
+                isCounselor: false, 
+                username: user.fullname, 
+                userId 
+            };
         }
     }
+
+    return null;
+}
+
+function isCounselor(subject: Subject): subject is Extract<Subject, { isCounselor: true }> {
+    return subject.isCounselor;
+}
+
+function isUser(subject: Subject): subject is Extract<Subject, { isCounselor: false }> {
+    return !subject.isCounselor;
 }
 
 export async function getCalendarInfo() {
     const subject = await getInfo();
   
-    if (subject) {
-      if (!subject.isCounselor && subject.counselorId) {
-        const calendarInfo = await db.query.counselorSchedules.findFirst({
-          where: eq(counselorSchedules.counselorId, subject.counselorId),
-        });
-  
-        let calenderdata = calendarInfo?.data; 
-        return { calenderdata };
-      } else {
-        if(subject.userId){
-            const calendarInfo = await db.query.userSchedule.findFirst({
-                where: eq(userSchedule.userId, subject.userId),
-            });
-
-            let calenderdata = calendarInfo?.data; 
-            return { calenderdata };
-        }
-      }
+    if (!subject) {
+        return { calenderdata: null };
     }
-  
-    return { calenderdata: null }
+
+    if (isCounselor(subject)) {
+        const calendarInfo = await db.query.counselorSchedules.findFirst({
+            where: eq(counselorSchedules.counselorId, subject.counselorId),
+        });
+
+        return { calenderdata: calendarInfo?.data ?? null };
+    } 
+    
+    if (isUser(subject)) {
+        const calendarInfo = await db.query.userSchedule.findFirst({
+            where: eq(userSchedule.userId, subject.userId),
+        });
+
+        return { calenderdata: calendarInfo?.data ?? null };
+    }
+
+    return { calenderdata: null };
 }
 
+export async function getMeetingData() {
+    const subject = await getInfo(); 
 
+    if (!subject) return { meetingData: null };
+
+    if(isCounselor(subject)){
+        const meetingdata = await db.query.meetings.findMany({
+            where: eq(meetings.counselorId, subject.counselorId)
+        })
+
+        let data = []; 
+
+        data = meetingdata.map(({ data }) => ({ data })); 
+
+        return { meetingData: data ?? null }; 
+    }
+
+    if(isUser(subject)){
+        const meetingdata = await db.query.meetings.findMany({
+            where: eq(meetings.userId, subject.userId)
+        })
+
+        let data = []; 
+
+        data = meetingdata.map(({ data }) => ({ data })); 
+
+        return { meetingData: data ?? null }; 
+    }
+
+    return { meetingData: null };
+}
+
+export async function getClassesData() {
+    const subject = await getInfo(); 
+
+    if(!subject) return { classesData: null }; 
+
+    if (isCounselor(subject)) {
+        const classesData = await db.query.classes.findMany({
+            where: eq(classes.counselorId, subject.counselorId),
+        });
+
+        const mappedData = Object.fromEntries(
+            classesData.map(({ id, data }) => [id, data])
+        );
+    
+        return { classesData: mappedData ?? null };
+    }
+
+    if (isUser(subject)) {
+        const userClasses = await db.query.usersOnClasses.findMany({
+            where: eq(usersOnClasses.userId, subject.userId),
+        });
+    
+        const data = await Promise.all(
+            userClasses.map(async ({ classId }) => {
+                return await db.query.classes.findFirst({
+                    where: eq(classes.id, classId),
+                });
+            })
+        );
+    
+        return { classesData: data.filter(Boolean) ?? null }; // remove them null values ya hurr 
+    }
+
+
+    return { classesData: null }; 
+}
