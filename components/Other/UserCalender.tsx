@@ -52,7 +52,7 @@ export default function UserCalender({}: Props) {
 
     if (!scheduleData) {
         return (
-          <div className="w-3/4 p-4 rounded-lg bg-orange-300 absolute bottom-0 text-center">
+          <div className="w-3/4 p-4 rounded-lg bg-orange-300 text-center">
             <h2 className="text-xl font-bold mb-4">User Schedule</h2>
             <p>No data available.</p>
           </div>

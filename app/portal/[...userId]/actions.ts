@@ -17,9 +17,11 @@ export async function getInfo() {
             where: eq(counselors.id, counselorId),
         });
 
+        let counselorname = counselor.fullname; 
+
         if (counselor) {
             !isCounselor; 
-            return { counselorId, isCounselor }; 
+            return { counselorname, counselorId, isCounselor }; 
         }
 
     } else if (userId) {
@@ -27,9 +29,11 @@ export async function getInfo() {
             where: eq(users.id, userId),
         });
 
+        let username = user.fullname; 
+
         if (user) {
             isCounselor; 
-            return { userId, isCounselor }; 
+            return { username, userId, isCounselor }; 
         }
     }
 }
