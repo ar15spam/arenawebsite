@@ -2,8 +2,8 @@
 
 import React from 'react'
 
-import CounselorCalendar from '@/components/other/CounselorCalendar';
-import { useRouter } from 'next/navigation'
+import CounselorCalendar from '@/components/other/CounselorCalendar'
+import { useRouter } from 'next/navigation' 
 
 type Props = {}
 

@@ -1,7 +1,7 @@
 "use client"
 
 import React from 'react'
-import UserCalender from '@/components/other/UserCalender'
+import UserCalender from '@/components/other/UserCalendar'
 
 type Props = {}
 
