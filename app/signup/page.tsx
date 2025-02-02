@@ -1,22 +1,22 @@
-"use client"
+"use client";
 
-import React from 'react'
-import { z } from "zod"
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'next/navigation'
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { signupuser } from './actions'
+import React from 'react';
+import { z } from "zod";
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { signupuser } from './actions';
 
 const userSchema = z.object({
-    fullname: z.string().min(2, "Please enter your real last name!"),
-    grade: z.number(),
+    fullname: z.string().min(2, "Please enter your real name!"),
+    grade: z.number().min(9, "Grade must be at least 9").max(12, "Grade must be at most 12"),
     email: z.string().email("Invalid email!"),
-    password: z.string().min(8, "Please make your password 8 characters long!"),
-    phonenumber: z.string().min(10, "Please enter your real school name!"),
+    password: z.string().min(8, "Password must be at least 8 characters long!"),
+    phonenumber: z.string().regex(/^\d{10}$/, "Please enter a valid 10-digit phone number!"),
 });
 
 export type userSchemaType = z.infer<typeof userSchema>;
@@ -29,13 +29,19 @@ export default function SignUpForm() {
     });
 
     const onSubmit = async (data: userSchemaType) => {
-        const sendToDb = await signupuser(data);
-        
-        if(sendToDb){
-            console.log("Data sent to db!");
-            router.push(`/portal/${sendToDb.userId}`);
-        } else {
-            console.log("Error!");
+        try {
+            const sendToDb = await signupuser(data);
+            
+            if (sendToDb?.success) {
+                console.log("Data sent to db!");
+                router.push(`/portal/${sendToDb.userId}`);
+            } else {
+                console.error("Signup failed:", sendToDb?.error);
+                alert("Signup failed. Please try again.");
+            }
+        } catch (error) {
+            console.error("Error during signup:", error);
+            alert("An error occurred during signup. Please try again.");
         }
     };
 
@@ -124,5 +130,5 @@ export default function SignUpForm() {
                 </CardContent>
             </Card>
         </div>
-    )
+    );
 }

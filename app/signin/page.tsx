@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { signInDb } from './actions'
+import { useSearchParams } from 'next/navigation'
 
 const signinSchema = z.object({ 
     email: z.string().email("Invalid email!"),
@@ -22,6 +23,9 @@ export type signinSchemaType = z.infer<typeof signinSchema>;
 
 export default function SignInForm() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const callbackUrl = searchParams.get('callbackUrl') || '/portal';
+
 
     const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<signinSchemaType>({
         resolver: zodResolver(signinSchema),
@@ -37,14 +41,14 @@ export default function SignInForm() {
 
         console.log('Processed data:', processedData);
         const response = await signInDb(processedData);
+        console.log(response); 
+        
         
         if(response.success){
-            if(response.counselorid){
+            if(response.counselorid) {
                 router.push(`/home/counselor/${response.counselorid}`);
-            } else if(response.userId){
+            } else if(response.userId) {
                 router.push(`/portal/${response.userId}`);
-            } else {
-                console.error("Authentication failed");
             }
         } else {
             console.error("Authentication failed");

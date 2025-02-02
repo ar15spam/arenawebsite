@@ -37,13 +37,27 @@ export default function CounselorCalendar({}: Props) {
     let interval: any;
 
     async function fetchSchedule() {
-      const calendarData = await getCalendarInfo();
-      const parsedcalendarData = calendarData.calenderdata; 
+      try {
+        const calendarData = await getCalendarInfo();
 
-      if (calendarData && isCounselorScheduleData(parsedcalendarData)) {
-        setScheduleData(parsedcalendarData);
-      } else {
-        console.error("Invalid data format:", calendarData);
+        // Ensure calendarData and parsedcalendarData exist before accessing properties
+        if (!calendarData || typeof calendarData !== "object") {
+          console.warn("calendarData is null or not an object:", calendarData);
+          setScheduleData({ booked: [] });
+          return;
+        }
+
+        const parsedcalendarData = calendarData.calenderdata;
+
+        if (isCounselorScheduleData(parsedcalendarData)) {
+          setScheduleData(parsedcalendarData);
+        } else {
+          console.warn("Invalid schedule format, setting to default:", parsedcalendarData);
+          setScheduleData({ booked: [] });
+        }
+      } catch (error) {
+        console.error("Error fetching schedule:", error);
+        setScheduleData({ booked: [] });
       }
     }
 
@@ -56,59 +70,63 @@ export default function CounselorCalendar({}: Props) {
   console.log(scheduleData); 
 
   return (
-  <div className="w-3/4 p-4 rounded-lg bg-orange-300 absolute bottom-0">
-  <h2 className="text-center text-xl font-bold mb-4">Counselor Schedule</h2>
-  <table className="w-full table-auto border-collapse">
-    <thead>
-      <tr>
-        <th className="border px-4 py-2">Day</th>
-        <th className="border px-4 py-2">Time Slots</th>
-      </tr>
-    </thead>
-    <tbody>
-      {scheduleData.booked.length > 0 ? (
-        scheduleData.booked.map((entry, index) => (
-          <tr key={index}>
-            <td className="border px-4 py-2">{entry.day}</td>
-            <td className="border px-4 py-2">
-              {entry.timeSlots.length > 0 ? (
-                <ul className="list-disc pl-5">
-                  {entry.timeSlots.map((slot, idx) => (
-                    <li key={idx} className="mb-2">
-                      <span className="font-bold">{slot.open ? "Open" : "Booked"}:</span>{" "}
-                      {!slot.open ? (
-                        <span>
-                          {slot.clientname} ({slot.clientemail}) -{" "}
-                          <a
-                            href={slot.meetinglink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-500 underline"
-                          >
-                            Meeting Link
-                          </a>
-                        </span>
-                      ) : (
-                        "Available"
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                "No time slots"
-              )}
-            </td>
+    <div className="w-3/4 p-4 rounded-lg bg-orange-300 absolute bottom-0">
+      <h2 className="text-center text-xl font-bold mb-4">Counselor Schedule</h2>
+      <table className="w-full table-auto border-collapse">
+        <thead>
+          <tr>
+            <th className="border px-4 py-2">Day</th>
+            <th className="border px-4 py-2">Time Slots</th>
           </tr>
-        ))
-      ) : (
-        <tr>
-          <td colSpan={2} className="border px-4 py-2 text-center">
-            No schedule data available
-          </td>
-        </tr>
-      )}
-    </tbody>
-  </table>
-</div>
+        </thead>
+        <tbody>
+          {scheduleData.booked.length > 0 ? (
+            scheduleData.booked.map((entry, index) => (
+              <tr key={index}>
+                <td className="border px-4 py-2">{entry.day}</td>
+                <td className="border px-4 py-2">
+                  {entry.timeSlots.length > 0 ? (
+                    <ul className="list-disc pl-5">
+                      {entry.timeSlots.map((slot, idx) => (
+                        <li key={idx} className="mb-2">
+                          <span className="font-bold">{slot.open ? "Open" : "Booked"}:</span>{" "}
+                          {!slot.open ? (
+                            <span>
+                              {slot.clientname ?? "Unknown"} ({slot.clientemail ?? "No Email"}) -{" "}
+                              {slot.meetinglink ? (
+                                <a
+                                  href={slot.meetinglink}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-blue-500 underline"
+                                >
+                                  Meeting Link
+                                </a>
+                              ) : (
+                                "No Meeting Link"
+                              )}
+                            </span>
+                          ) : (
+                            "Available"
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    "No time slots"
+                  )}
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan={2} className="border px-4 py-2 text-center">
+                No schedule data available
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
   );
 }

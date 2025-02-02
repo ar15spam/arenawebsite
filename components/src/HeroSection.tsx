@@ -1,11 +1,46 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect, ReactNode } from "react";
+import { getInfo } from "@/app/portal/[...userId]/actions";
 
 import Image from "next/image";
 import Link from "next/link";
 
+type Subject =
+  | {
+      isCounselor: true;
+      counselorname: string;
+      counselorId: string;
+    }
+  | {
+      isCounselor: false;
+      username: string;
+      userId: string;
+};
+
+
+function isFrontendUser(subject: any): subject is Extract<Subject, { isCounselor: false }> {
+  return subject && typeof subject === "object" && "isCounselor" in subject && !subject.isCounselor;
+}
+
+function isFrontendCounselor(subject: any): subject is Extract<Subject, { isCounselor: true }> {
+  return subject && typeof subject === "object" && "isCounselor" in subject && subject.isCounselor;
+}
+
 const HeroSection = () => {
+
+  const[userid, setuserid] = useState<String>(""); 
+
+  useEffect(() => {
+    async function getUserId() {
+      const response = await getInfo();
+      if(isFrontendUser(response)){
+        setuserid(response.userId ?? "no user detected"); 
+      }
+    }
+    getUserId(); 
+  }, []); 
+
   return (
     <section className="hero-section bg-white text-black min-h-screen flex flex-col items-center justify-center">
       <header className="absolute top-0 left-0 w-full p-4 flex justify-between items-center">
@@ -14,7 +49,9 @@ const HeroSection = () => {
           <span>ARENA</span>
         </div>
         <nav className="hidden lg:flex text-sm space-x-8">
-          <button className="hover:underline">Services</button>
+          <button className="hover:underline">
+            <Link href={`/portal/${userid}`}>Portal</Link>
+            </button>
           <button className="hover:underline">Testimonials</button>
           <button className="hover:underline">FAQs</button>
           <button className="hover:underline">Essays</button>

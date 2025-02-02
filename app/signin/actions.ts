@@ -27,9 +27,12 @@ export async function signInDb(data: signinSchemaType) {
 
             const cookieStore = await cookies();
 
+            let counselorid = counselor.id; 
+            console.log("counselorid:", counselorid);
+
             cookieStore.set({
                 name: 'counselorid',
-                value: counselor.id,
+                value: counselorid,
                 httpOnly: true,
                 secure: true,
                 path: '/',

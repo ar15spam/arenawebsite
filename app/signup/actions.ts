@@ -75,9 +75,10 @@ export async function signupuser(data: userSchemaType) {
 
         }
 
-        return { success: false }; 
+        return { success: false, error: "Failed to create user." }; 
 
     } catch(error) {
         console.error("yeah man u too stupid to be consulted with my nga", error); 
+        return { success: false, error: "An error occurred during signup." };
     }
 }
