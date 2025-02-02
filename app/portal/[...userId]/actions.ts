@@ -102,25 +102,55 @@ export async function getMeetingData() {
         return { meetingData: data ?? null }; 
     }
 
-    if(isUser(subject)){
+    if (isUser(subject)) {
         const meetingdata = await db.query.meetings.findMany({
             where: eq(meetings.userId, subject.userId)
-        })
+        });
 
-        let data = []; 
-
-        data = meetingdata.map(({ data }) => ({ data })); 
-
-        return { meetingData: data ?? null }; 
+        const data = meetingdata.map(({ data }) => ({ data }));
+    
+        return { meetingData: data.length > 0 ? data[0] : null }; 
     }
+    
 
     return { meetingData: null };
 }
 
+export async function getClasses() {
+    const subject = await getInfo();
+  
+    if (!subject) return { classes: null };
+  
+    if (isCounselor(subject)) {
+      const returnclasses = await db.query.classes.findMany({
+        where: eq(classes.counselorId, subject.counselorId),
+      });
+      return { classesData: returnclasses };
+    }
+  
+    if (isUser(subject)) {
+      const userClasses = await db.query.usersOnClasses.findMany({
+        where: eq(usersOnClasses.userId, subject.userId),
+      });
+  
+      const returnclasses = await Promise.all(
+        userClasses.map(async ({ classId }) => {
+          const classesForUser = await db.query.classes.findMany({
+            where: eq(classes.id, classId),
+          });
+          return classesForUser;
+        })
+      );
+  
+      const flattenedClasses = returnclasses.flat(); 
+      return { classesData: flattenedClasses };
+    }
+  }
+
 export async function getClassesData() {
     const subject = await getInfo(); 
 
-    if(!subject) return { classesData: null }; 
+    if(!subject) return  null ; 
 
     if (isCounselor(subject)) {
         const classesData = await db.query.classes.findMany({
@@ -131,7 +161,7 @@ export async function getClassesData() {
             classesData.map(({ id, data }) => [id, data])
         );
     
-        return { classesData: mappedData ?? null };
+        return mappedData ?? null;
     }
 
     if (isUser(subject)) {
@@ -147,7 +177,7 @@ export async function getClassesData() {
             })
         );
     
-        return { classesData: data.filter(Boolean) ?? null }; // remove them null values ya hurr 
+        return  data.filter(Boolean) ?? null ; // remove them null values ya hurr 
     }
 
 

@@ -23,22 +23,30 @@ export type signinSchemaType = z.infer<typeof signinSchema>;
 export default function SignInForm() {
     const router = useRouter();
 
-    const { register, handleSubmit, formState: { errors } } = useForm<signinSchemaType>({
+    const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<signinSchemaType>({
         resolver: zodResolver(signinSchema),
     });
 
     const onSubmit = async (data: signinSchemaType) => {
         console.log('Submitted data:', data);
-        const response = await signInDb(data);
-        console.log(response);
-        if(response.success === true){
+
+        const processedData = { 
+            ...data, 
+            isCounselor: Boolean(data.isCounselor),  
+        };
+
+        console.log('Processed data:', processedData);
+        const response = await signInDb(processedData);
+        
+        if(response.success){
             if(response.counselorid){
                 router.push(`/home/counselor/${response.counselorid}`);
-            } else {
+            } else if(response.userId){
                 router.push(`/portal/${response.userId}`);
+            } else {
+                console.error("Authentication failed");
             }
         } else {
-            // Consider using a toast notification here instead of returning JSX
             console.error("Authentication failed");
         }
     };
@@ -52,21 +60,20 @@ export default function SignInForm() {
                 <CardContent>
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                         <div className="flex items-center space-x-2">
-                            <Checkbox
-                                id="isCounselor"
-                                {...register('isCounselor')}
-                            />
+                        <Checkbox
+                            id="isCounselor"
+                            checked={!!watch("isCounselor")}
+                            onCheckedChange={(checked) => setValue("isCounselor", !!checked)}
+                        />
                             <Label htmlFor="isCounselor">I am a counselor</Label>
                         </div>
-                        {errors.isCounselor && (
-                            <p className="text-sm text-red-500">{errors.isCounselor.message}</p>
-                        )}
 
                         <div className="space-y-2">
                             <Label htmlFor="email">Email</Label>
                             <Input
                                 id="email"
                                 type="email"
+                                autoComplete="email"
                                 placeholder="your@email.com"
                                 {...register('email')}
                                 className="w-full"
@@ -81,6 +88,7 @@ export default function SignInForm() {
                             <Input
                                 id="password"
                                 type="password"
+                                autoComplete="current-password"
                                 placeholder="••••••••"
                                 {...register('password')}
                                 className="w-full"

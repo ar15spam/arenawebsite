@@ -2,7 +2,7 @@
 
 import { db } from "@/db";
 import { counselors, users } from "@/db/schema";
-import { eq, and } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import bcrypt from "bcrypt";
 import { cookies } from "next/headers";
 import type { signinSchemaType } from "./page";
@@ -11,21 +11,17 @@ export async function signInDb(data: signinSchemaType) {
     try {
         const { isCounselor, email, password } = data;
 
-        if(isCounselor){
+        if (isCounselor) {
             const counselor = await db.query.counselors.findFirst({
-                where: and(
-                    eq(counselors.email, email),
-                    eq(counselors.hashedPassword, password)
-                )
-            }); 
+                where: eq(counselors.email, email),
+            });
 
             if (!counselor) {
                 return { success: false, error: "Invalid email or password" };
             }
 
-            //const passwordMatch = await bcrypt.compare(password, counselor.hashedPassword);
-
-            /* if (!passwordMatch) {
+            /* const passwordMatch = await bcrypt.compare(password, counselor.hashedPassword);
+            if (!passwordMatch) {
                 return { success: false, error: "Invalid email or password" };
             } */
 
@@ -39,7 +35,6 @@ export async function signInDb(data: signinSchemaType) {
                 path: '/',
                 maxAge: 60 * 60 * 24 * 7,
             });
-
 
             cookieStore.set({
                 name: 'counselorfullname',
@@ -59,12 +54,10 @@ export async function signInDb(data: signinSchemaType) {
                 maxAge: 60 * 60 * 24 * 7,
             });
 
-            let counselorid = counselor.id; 
-            
-            return { success: true, counselorid };
-
+            return { success: true, counselorid: counselor.id };
         }
 
+        // If not a counselor, treat as a regular user (client)
         const user = await db.query.users.findFirst({
             where: eq(users.email, email),
         });
@@ -74,28 +67,24 @@ export async function signInDb(data: signinSchemaType) {
         }
 
         const passwordMatch = await bcrypt.compare(password, user.hashedPassword);
-
         if (!passwordMatch) {
             return { success: false, error: "Invalid email or password" };
         }
-
-        const { id: userId, fullname, email: userEmail } = user;
 
         const cookieStore = await cookies();
 
         cookieStore.set({
             name: 'userid',
-            value: userId,
+            value: user.id,
             httpOnly: true,
             secure: true,
             path: '/',
             maxAge: 60 * 60 * 24 * 7,
         });
 
-
         cookieStore.set({
             name: 'userfullname',
-            value: fullname,
+            value: user.fullname,
             httpOnly: false,
             secure: true,
             path: '/',
@@ -104,14 +93,14 @@ export async function signInDb(data: signinSchemaType) {
 
         cookieStore.set({
             name: 'useremail',
-            value: userEmail,
+            value: user.email,
             httpOnly: false,
             secure: true,
             path: '/',
             maxAge: 60 * 60 * 24 * 7,
         });
 
-        return { success: true, userId };
+        return { success: true, userId: user.id };
 
     } catch (error) {
         console.error("Sign-in error:", error);

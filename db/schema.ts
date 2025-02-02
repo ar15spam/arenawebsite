@@ -10,7 +10,7 @@ interface CounselorScheduleData {
 }
 
 interface ClassData {
-    syllabus: string[];
+    syllabus: string;
     resources: { name: string; link: string }[];
 }
 
@@ -133,7 +133,7 @@ export const classes = pgTable("classes", {
     name: text().notNull(), 
     isPrivate: boolean().notNull().default(false), 
     counselorId: text().references(() => counselors.id),
-    data: jsonb().default({ syllabus: [], resources: [] } as ClassData),
+    data: jsonb().default({ syllabus: "", resources: [] } as ClassData),
     updatedAt: timestamp().notNull().defaultNow(), 
 });
 
